@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ModeratorController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,14 @@ Route::middleware([\App\Http\Middleware\Admin::class])->prefix('moderator')->gro
 Route::get('/{post}', [ModeratorController::class, 'show'])->name('moderator.show');
 Route::post('/{post}/accept', [ModeratorController::class, 'accept'])->name('moderator.accept');
 Route::post('/{post}/reject', [ModeratorController::class, 'reject'])->name('moderator.reject');
+});
+
+Route::middleware('auth')->prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::get('/{id}/read', [NotificationController::class, 'edit'])->name('notifications.edit');
+    Route::post('/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::delete('/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 require __DIR__.'/auth.php';

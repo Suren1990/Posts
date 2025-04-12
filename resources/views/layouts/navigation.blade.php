@@ -13,13 +13,28 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Dashboard') }} 
                     </x-nav-link>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="relative ml-4 ">
+                    @php
+                        $unreadCount = Auth::user()->notifications()->where('is_read', false)->count();
+                    @endphp
+                    <a href="{{route('notifications.index')}}" class="relative text-gray-600 dark:text-gray-300 text-2xl right-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.98 2.98 0 0118 13V8a6 6 0 10-12 0v5a2.98 2.98 0 01-1.595 2.595L4 17h5m6 0v1a3 3 0 11-6 0v-1" />
+                        </svg>
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -47,6 +62,7 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
+                        <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
@@ -56,6 +72,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+                        
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -105,4 +122,5 @@
             </div>
         </div>
     </div>
+    
 </nav>

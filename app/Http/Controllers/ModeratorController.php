@@ -8,14 +8,19 @@ use App\Http\Requests\Post\FilterRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class ModeratorController extends Controller
 {
     public function index(Request $request, User $users)
     {
-        $posts = Post::filterByStatus($request->input('status'))->paginate(100);  
-
+        $query = Post::filterByStatus($request->input('status'));
+        if (auth()->user()->role !== 'admin') {
+            $query->where('user_id', auth()->id());
+        }
+        $posts = $query->paginate(6);
+        
         return view('moderator.index', compact('posts', 'users'));
     }
 
@@ -26,6 +31,11 @@ class ModeratorController extends Controller
     public function accept(Post $post){
         $post->status = 'accepted';
         $post->save();
+        Notification::create([
+            'user_id' => $post->user_id,
+            'message' => "Your Post #{$post->title} is accepted with moderator.",
+        ]);
+        
         return redirect()->route('moderator.index');
     }
 
@@ -36,6 +46,11 @@ class ModeratorController extends Controller
         $post->update([
             'status' => 'rejected',
             'moderator_comments' => $request->input('moderator_comments'),
+        ]);
+
+        Notification::create([
+            'user_id' => $post->user_id,
+            'message' => "Your Post #{$post->title} is rejected with moderator. Comment: " . ($post->moderator_comments ?? ''),
         ]);
        
         return redirect()->route('moderator.index');
