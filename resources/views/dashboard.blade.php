@@ -14,8 +14,8 @@
                     </div>
                     <p class="text-sm text-gray-600 dark:text-gray-400">Welcome back {{ Auth::user()->name }} to your dashboard. You can access all your data and settings from here.</p>
                     <div class="mt-8">
-                        <a href="#" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-indigo-700 transition duration-200 ease-in-out">
-                            Go to Settings
+                        <a href="{{route('profile.edit')}}" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-indigo-700 transition duration-200 ease-in-out">
+                            Go to Profile
                         </a>
                     </div>
                 </div>

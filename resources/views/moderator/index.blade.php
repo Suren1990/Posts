@@ -20,7 +20,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
         
             @foreach($posts as $post)
-                @if(Auth::user()->id == $post->creator->id || Auth::user()->role === 'admin')
+                
                     <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition duration-300 ease-in-out">
                     <h3 class="text-2xl font-semibold mb-4 {{ $post->status === 'rejected' ? 'text-red-600' : ($post->status === 'pending' ? 'text-blue-600' : 'text-gray-800') }}">
                         {{ ucfirst($post->status) }}
@@ -46,7 +46,7 @@
                         <label for="post" class="block text-red-700 text-lg font-semibold mb-2">{{$post->moderator_comments ? "Comments ".$post->moderator_comments : ""}}</label>
                         
                     </div>
-                @endif
+                
             @endforeach
             
         </div>
